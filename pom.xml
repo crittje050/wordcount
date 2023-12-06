@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>wordcount</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Word Count</name>
+    <modules>
+        <module>core</module>
+        <module>rest-adapter</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <spotless.version>2.35.0</spotless.version>
+        <junit.version>5.10.1</junit.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.diffplug.spotless</groupId>
+            <artifactId>spotless-maven-plugin</artifactId>
+            <version>${spotless.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <formats>
+                        <format>
+                            <includes>
+                                <include>*.md</include>
+                                <include>.gitignore</include>
+                            </includes>
+
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <tabs>true</tabs>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
+                    <java>
+                        <excludes>
+                            <exclude>**/wsdl/**.java</exclude>
+                        </excludes>
+                        <googleJavaFormat>
+                            <version>1.15.0</version>
+                            <style>GOOGLE</style>
+                            <reflowLongStrings>true</reflowLongStrings>
+                        </googleJavaFormat>
+                        <licenseHeader>
+                            <content>/* (C)$YEAR */</content>
+                        </licenseHeader>
+                    </java>
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
