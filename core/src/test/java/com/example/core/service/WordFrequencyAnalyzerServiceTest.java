@@ -3,6 +3,7 @@ package com.example.core.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.example.core.application.exception.WordFrequencyAnalyzerException;
 import com.example.core.application.port.WordFrequencyAnalyzer;
 import com.example.core.application.service.WordFrequencyAnalyzerService;
 import com.example.core.domain.WordFrequency;
@@ -21,7 +22,7 @@ class WordFrequencyAnalyzerServiceTest {
   }
 
   @Test
-  void calculateHighestFrequency() {
+  void testCalculateHighestFrequency() {
 
     String text = "The sun shines over the lake";
 
@@ -31,7 +32,7 @@ class WordFrequencyAnalyzerServiceTest {
   }
 
   @Test
-  void calculateFrequencyForWord() {
+  void testCalculateFrequencyForWord() {
 
     String text = "The sun shines over the lake sun sun";
     String word = "sun";
@@ -42,7 +43,7 @@ class WordFrequencyAnalyzerServiceTest {
   }
 
   @Test
-  void calculateMostFrequentNWords() {
+  void testCalculateMostFrequentNWords() {
 
     String text = "The sun shines over the lake sun sun";
     int n = 2;
@@ -56,18 +57,35 @@ class WordFrequencyAnalyzerServiceTest {
     assertEquals(2, mostFrequentNWords.get(1).frequency());
   }
 
-      @Test
-      void calculateHighestFrequencyWithEmptyText() {
+  @Test
+  void testCalculateHighestFrequencyWithEmptyTextThrows() {
 
-          String text = "";
+    String text = "";
 
-          int highestFrequency = testable.calculateHighestFrequency(text);
-
-          assertEquals(0, highestFrequency);
-      }
+    assertThrows(
+        WordFrequencyAnalyzerException.class, () -> testable.calculateHighestFrequency(text));
+  }
 
   @Test
-  void calculateMostFrequentNWordsIsDescendingOrder() {
+  void testCalculateFrequencyForWordWhenWordIsEmptyThrows() {
+
+    String text = "The sun shines over the lake";
+
+    assertThrows(
+        WordFrequencyAnalyzerException.class, () -> testable.calculateFrequencyForWord(text, ""));
+  }
+
+  @Test
+  void testCalculateFrequencyForWordWhenTextIsEmptyThrows() {
+
+    String word = "sun";
+
+    assertThrows(
+        WordFrequencyAnalyzerException.class, () -> testable.calculateFrequencyForWord("", word));
+  }
+
+  @Test
+  void testCalculateMostFrequentNWordsIsDescendingOrder() {
 
     String text = "The sun its son shines over son its lake sun";
     int n = 4;
@@ -83,5 +101,24 @@ class WordFrequencyAnalyzerServiceTest {
     assertEquals(2, mostFrequentNWords.get(2).frequency());
     assertEquals("lake", mostFrequentNWords.get(3).word());
     assertEquals(1, mostFrequentNWords.get(3).frequency());
+  }
+
+  @Test
+  void testCalculateMostFrequentNWordsWhenTextIsEmptyThrows() {
+
+    int n = 1;
+
+    assertThrows(
+        WordFrequencyAnalyzerException.class, () -> testable.calculateMostFrequentNWords("", n));
+  }
+
+  @Test
+  void testCalculateMostFrequentNWordsIsNegativeThrows() {
+
+    String text = "The sun shines over the lake";
+    int n = -1;
+
+    assertThrows(
+        WordFrequencyAnalyzerException.class, () -> testable.calculateMostFrequentNWords(text, n));
   }
 }

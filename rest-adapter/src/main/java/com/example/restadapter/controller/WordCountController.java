@@ -7,6 +7,7 @@ import com.example.core.application.exception.WordFrequencyAnalyzerException;
 import com.example.core.application.exception.WordFrequencyException;
 import com.example.core.application.service.WordFrequencyAnalyzerService;
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Response;
@@ -29,7 +30,7 @@ public class WordCountController {
   public Response getWordCount(
       @QueryParam("text") @NotNull final String text,
       @QueryParam("word") @NotNull final String word,
-      @QueryParam("n") final int n) {
+      @QueryParam("n") @Min(value = 0) final int n) {
 
     logger.info("Request for analysis received with text: '{}', word: '{}', n: {}.", text, word, n);
 

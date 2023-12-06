@@ -71,4 +71,21 @@ class WordCountControllerServerTest extends JerseyTest {
         "Cannot construct WordFrequency: Word must contain only letters",
         response.readEntity(String.class));
   }
+
+  @Test
+  void testGetWOrdCountWithNegativeNumberThrowsHttpStatus400() {
+
+    Response response =
+        target("/word-count")
+            .queryParam("text", "text")
+            .queryParam("word", "text")
+            .queryParam("n", -1)
+            .request()
+            .get();
+
+    assertEquals(400, response.getStatus());
+    assertEquals(
+        "Whoops something went wrong! Please provide a positive number to analyze.",
+        response.readEntity(String.class));
+  }
 }

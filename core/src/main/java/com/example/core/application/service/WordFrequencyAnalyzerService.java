@@ -61,7 +61,7 @@ public class WordFrequencyAnalyzerService implements WordFrequencyAnalyzer {
   @Override
   public List<WordFrequency> calculateMostFrequentNWords(String text, int n) {
 
-    validateText(text);
+    validateTextAndNumber(text, n);
 
     return groupWordsAndFrequencies(text).entrySet().stream()
         .map(entrySet -> new WordFrequencyImpl(entrySet.getKey(), entrySet.getValue().intValue()))
@@ -82,19 +82,28 @@ public class WordFrequencyAnalyzerService implements WordFrequencyAnalyzer {
         .collect(Collectors.groupingBy(word -> word, Collectors.counting()));
   }
 
-  private void validateText(String text) {
-    if (text == null) {
+  private void validateText(final String text) {
+    if (text == null || text.isEmpty()) {
       throw new WordFrequencyAnalyzerException(
           "Whoops something went wrong! Please provide a text to analyze.");
     }
   }
 
-  private void validateTextAndWord(String text, String word) {
+  private void validateTextAndWord(final String text, final String word) {
     validateText(text);
 
-    if (word == null) {
+    if (word == null || word.isEmpty()) {
       throw new WordFrequencyAnalyzerException(
           "Whoops something went wrong! Please provide a word to analyze.");
+    }
+  }
+
+  private void validateTextAndNumber(final String text, final int n) {
+    validateText(text);
+
+    if (n < 0) {
+      throw new WordFrequencyAnalyzerException(
+          "Whoops something went wrong! Please provide a positive number to analyze.");
     }
   }
 }
